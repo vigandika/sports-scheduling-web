@@ -24,12 +24,17 @@
             </v-text-field>
 
             <v-text-field
+              v-model="numberOfTeams"
               label="Number of teams"
               type="number"
               :rules="[rules.number]"
             >
             </v-text-field>
-            <v-btn color="primary" @click="e1 = 2" :disabled="!firstStepValid">
+            <v-btn
+              color="primary"
+              @click="finishFirstStep()"
+              :disabled="!firstStepValid"
+            >
               Continue
             </v-btn>
           </v-form>
@@ -40,12 +45,13 @@
             <v-row
               align="center"
               justify="center"
-              v-for="index in 10"
-              :key="index"
+              v-for="team in teams"
+              :key="team.id"
             >
               <v-col cols="1" sm="4">
                 <v-text-field
-                  :label="`Team ${index}`"
+                  v-model="team.name"
+                  :label="`Team ${team.id}`"
                   :rules="[rules.required]"
                 >
                 </v-text-field>
@@ -53,6 +59,7 @@
 
               <v-col cols="1" sm="2">
                 <v-select
+                  v-model="team.category"
                   required
                   :items="['A', 'B', 'C']"
                   label="Category"
@@ -92,34 +99,8 @@
                   >OpponentConstraint (SOFT)</v-expansion-panel-header
                 >
                 <v-expansion-panel-content>
-                  <v-form
-                    ref="opponentConstraintForm"
-                    v-model="secondStepValid"
-                  >
-                    <v-row
-                      align="center"
-                      justify="center"
-                      v-for="opponentConstraint in opponentConstraints"
-                      :key="opponentConstraint.id"
-                    >
-                      <v-col cols="1" sm="4">
-                        <v-text-field label="Test"></v-text-field>
-                      </v-col>
-
-                      <v-col cols="1" sm="2">
-                        <v-text-field label="Test"> </v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-form>
-                  <v-btn
-                    icon
-                    block
-                    class="add-btn"
-                    color="primary"
-                    @click="addOpponentConstraint"
-                  >
-                    <v-icon>mdi-plus-circle-outline</v-icon>
-                  </v-btn>
+                  <opponent-constraint-panel :teams="teams">
+                  </opponent-constraint-panel>
                 </v-expansion-panel-content>
               </v-expansion-panel>
 
@@ -138,33 +119,36 @@
 </template>
 
   <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { OpponentConstraint } from "../models/OpponentConstraint";
+import { Component, Vue, Mixins } from "vue-property-decorator";
+import { OpponentConstraint } from "@/models/OpponentConstraint";
+import OpponentConstraintPanel from "@/components/OpponentConstraintPanel.vue";
+import { Team } from "@/models/Team";
+import RulesMixin  from "@/mixins/RulesMixin";
 
-@Component
-export default class ScheduleGenerator extends Vue {
+@Component({
+  components: {
+    OpponentConstraintPanel,
+  },
+})
+export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
+  private teams: Team[] = [];
+  private numberOfTeams: number | null = null;
   private e1 = 1;
   private firstStepValid = true;
   private secondStepValid = true;
   private isOkay = false;
-  private opponentConstraints: Array<OpponentConstraint> = [];
-  private rules = {
-    required: (value) => !!value || "Required",
-    number: (value) =>
-      (parseInt(value) && parseInt(value) >= 5) ||
-      "The number of teams should be a valid number and greater than 4",
-  };
 
-  private addOpponentConstraint(): void {
-    this.opponentConstraints.push(new OpponentConstraint(0, 0, 0, 0));
+  private finishFirstStep() {
+    this.e1 = 2;
+    if (this.numberOfTeams !== null) {
+      for (let index = 0; index < this.numberOfTeams; index++) {
+        this.teams.push(new Team(index + 1));
+      }
+    } else {
+      console.error("numberOfTeams is null before stepping to step 2");
+    }
   }
 }
 </script>
 
-<style scoped>
-.add-btn::before,
-.add-btn::after,
-.v-btn--round {
-  border-radius: 0;
-}
-</style>
+

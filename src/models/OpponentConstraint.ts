@@ -1,13 +1,13 @@
 export class OpponentConstraint {
     type: string;
     level: string;
-    teamId: number;
-    opponentId: number;
-    matchweek: number;
-    penalty: number;
+    teamId?: number;
+    opponentId?: number;
+    matchweek?: number;
+    penalty?: number;
     
-
-    constructor(teamId: number, opponentId: number, matchweek: number, penalty: number) {
+    constructor();
+    constructor(teamId?: number, opponentId?: number, matchweek?: number, penalty?: number) {
         this.type = "opponentConstraint";
         this.level = "SOFT";
         this.teamId = teamId;
