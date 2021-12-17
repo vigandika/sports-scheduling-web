@@ -21,7 +21,13 @@
           </v-select>
         </v-col>
         <v-col cols="10" sm="3">
-          <v-radio-group row align="center" justify="center" :style="{padding: '0 0 0 50px'}" v-model="venueConstraint.venue">
+          <v-radio-group
+            row
+            align="center"
+            justify="center"
+            :style="{ padding: '0 0 0 50px' }"
+            v-model="venueConstraint.venue"
+          >
             <v-radio label="Home" value="H"></v-radio>
             <v-radio label="Away" value="A"></v-radio>
           </v-radio-group>
@@ -31,7 +37,7 @@
           <v-select
             required
             v-model="venueConstraint.matchweek"
-            :items="[1,2,3,4,5]"
+            :items="[1, 2, 3, 4, 5]"
             label="Matchweek"
             :rules="[rules.required]"
           >
@@ -58,7 +64,6 @@
 </template>
 
 <script lang="ts">
-import { OpponentConstraint } from "@/models/OpponentConstraint";
 import { PropType } from "vue";
 import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
 import { Team } from "@/models/Team";
@@ -79,15 +84,14 @@ export default class VenueConstraintPanel extends Mixins(Vue, RulesMixin) {
   @Prop({ type: Array as PropType<Number[]>, required: true })
   private matchweeks: number[] | undefined;
 
-private venueConstraints: Array<VenueConstraint> = [];
+  private venueConstraints: Array<VenueConstraint> = [];
   private venueConstraintFormValid: boolean = false;
-
 
   private addVenueConstraint(): void {
     this.venueConstraints.push(new VenueConstraint());
   }
 
-  private updatePenalty(penalty: number, constraint: OpponentConstraint) {
+  private updatePenalty(penalty: number, constraint: VenueConstraint) {
     constraint.penalty = penalty;
   }
 }

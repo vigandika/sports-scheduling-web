@@ -1,16 +1,19 @@
 <template>
   <v-container>
-    <v-form ref="opponentConstraintForm" v-model="opponentConstraintFormValid">
+    <v-form
+      ref="repeaterGapConstraintForm"
+      v-model="repeaterGapConstraintFormValid"
+    >
       <v-row
         align="center"
         justify="center"
-        v-for="(opponentConstraint, index) in opponentConstraints"
+        v-for="(repeaterGapConstraint, index) in repeaterGapConstraints"
         :key="index"
       >
         <v-col cols="10" sm="4">
           <v-select
             required
-            v-model="opponentConstraint.teamId"
+            v-model="repeaterGapConstraint.team1Id"
             :items="teams"
             item-text="name"
             item-value="id"
@@ -18,14 +21,13 @@
             :rules="[rules.required]"
             return-object
           >
-            <!-- should return object be used? -->
           </v-select>
         </v-col>
 
         <v-col cols="10" sm="4">
           <v-select
             required
-            v-model="opponentConstraint.opponentId"
+            v-model="repeaterGapConstraint.team2Id"
             :items="teams"
             item-text="name"
             item-value="id"
@@ -33,25 +35,24 @@
             :rules="[rules.required]"
             return-object
           >
-            <!-- should return object be used? -->
           </v-select>
         </v-col>
 
         <v-col cols="10" sm="2">
-          <v-select
-            required
-            v-model="opponentConstraint.matchweek"
-            :items="matchweeks"
-            label="Matchweek"
-            :rules="[rules.required]"
+          <v-text-field
+            v-model="repeaterGapConstraint.minimumGap"
+            label="Minimum Gap"
+            type="number"
+            :rules="[rules.required, repeaterGapRules.minimumGap]"
           >
-          </v-select>
+          </v-text-field>
         </v-col>
 
         <v-col cols="10" sm="2">
-          <penalty-slider @update-penalty="updatePenalty($event, opponentConstraint)" />
+          <penalty-slider
+            @update-penalty="updatePenalty($event, repeaterGapConstraint)"
+          />
         </v-col>
-
       </v-row>
     </v-form>
     <v-btn
@@ -59,7 +60,7 @@
       block
       class="add-btn"
       color="primary"
-      @click="addOpponentConstraint"
+      @click="addRepeaterGapConstraint"
     >
       <v-icon>mdi-plus-circle-outline</v-icon>
     </v-btn>
@@ -67,36 +68,46 @@
 </template>
 
 <script lang="ts">
-import { OpponentConstraint } from "@/models/OpponentConstraint";
 import { PropType } from "vue";
 import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
-import PenaltySlider from "@/components/shared/PenaltySlider.vue"
+import PenaltySlider from "@/components/shared/PenaltySlider.vue";
+import { RepeaterGapConstraint } from "@/models/RepeaterGapConstraint";
 
 @Component({
-  name: "OpponentConstraintPanel",
+  name: "RepeaterGapConstraintPanel",
   components: {
-    PenaltySlider
-  }
+    PenaltySlider,
+  },
 })
-export default class OpponentConstraintPanel extends Mixins(Vue, RulesMixin) {
+export default class RepeaterGapConstraintPanel extends Mixins(Vue, RulesMixin) {
   @Prop({ type: Array as PropType<Team[]>, required: true })
   private teams: Team[] | undefined;
 
   @Prop({ type: Array as PropType<Number[]>, required: true })
   private matchweeks: number[] | undefined;
 
-  private opponentConstraints: Array<OpponentConstraint> = [];
-  private opponentConstraintFormValid: boolean = false;
+  private repeaterGapConstraints: Array<RepeaterGapConstraint> = [];
+  private repeaterGapConstraintFormValid: boolean = false;
 
-  private addOpponentConstraint(): void {
-    this.opponentConstraints.push(new OpponentConstraint());
+  private addRepeaterGapConstraint(): void {
+    this.repeaterGapConstraints.push(new RepeaterGapConstraint());
   }
 
-  private updatePenalty(penalty: number, constraint: OpponentConstraint) {
+  private updatePenalty(penalty: number, constraint: RepeaterGapConstraint) {
     constraint.penalty = penalty;
   }
+
+  repeaterGapRules = {
+    minimumGap: (value) => {
+        if (this.matchweeks !== undefined) {
+            return (parseInt(value) && parseInt(value) < this.matchweeks.length ) 
+            || `The number of teams should be a valid number and smaller than the total number of matchweeks (${this.matchweeks.length})`
+        } 
+        
+    }
+  };
 }
 </script>
 

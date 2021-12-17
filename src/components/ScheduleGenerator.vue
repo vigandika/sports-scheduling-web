@@ -91,6 +91,19 @@
                 <v-expansion-panel-header>
                   StaticVenueConstraint (HARD)
                 </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <static-venue-constraint-panel
+                    :numberOfMatchweeks="numberOfMatchweeks"
+                  >
+                  </static-venue-constraint-panel>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  StaticVenueConstraint (HARD)
+                </v-expansion-panel-header>
                 <v-expansion-panel-content> </v-expansion-panel-content>
               </v-expansion-panel>
 
@@ -119,6 +132,19 @@
                   </venue-constraint-panel>
                 </v-expansion-panel-content>
               </v-expansion-panel>
+
+              <v-expansion-panel>
+                <v-expansion-panel-header>
+                  RepeaterGapConstraint (SOFT)
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <repeater-gap-constraint-panel
+                    :teams="teams"
+                    :matchweeks="matchweeks"
+                  >
+                  </repeater-gap-constraint-panel>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-expansion-panels>
           </v-row>
         </v-stepper-content>
@@ -127,17 +153,21 @@
   </v-container>
 </template>
 
-  <script lang="ts">
+<script lang="ts">
 import { Component, Vue, Mixins } from "vue-property-decorator";
+import StaticVenueConstraintPanel from "@/components/StaticVenueConstraintPanel.vue";
 import OpponentConstraintPanel from "@/components/OpponentConstraintPanel.vue";
 import VenueConstraintPanel from "@/components/VenueConstraintPanel.vue";
+import RepeaterGapConstraintPanel from "@/components/RepeaterGapConstraintPanel.vue";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
 
 @Component({
   components: {
+    StaticVenueConstraintPanel,
     OpponentConstraintPanel,
     VenueConstraintPanel,
+    RepeaterGapConstraintPanel,
   },
 })
 export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
@@ -167,6 +197,10 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
       }
     }
     return matchweeks;
+  }
+
+  get numberOfMatchweeks() {
+    return this.matchweeks.length;
   }
 }
 </script>

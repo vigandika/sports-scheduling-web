@@ -1,13 +1,13 @@
 export class RepeaterGapConstraint {
-    type: string;
-    level: string;
-    team1Id: number;
-    team2Id: number;
-    minimumGap: number;
-    penalty: number;
+    type?: string;
+    level?: string;
+    team1Id?: number;
+    team2Id?: number;
+    minimumGap?: number;
+    penalty?: number;
     
 
-    constructor(team1Id: number, team2Id: number, minimumGap: number, penalty: number) {
+    constructor(team1Id?: number, team2Id?: number, minimumGap?: number, penalty?: number) {
         this.type = "repeaterGapConstraint";
         this.level = "SOFT";
         this.team1Id = team1Id;
