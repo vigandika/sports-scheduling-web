@@ -12,6 +12,6 @@ class RulesMixin extends Vue {
           "The number of teams should be a valid number and greater than 4",
     };
 
-    private penalties = [1, 2, 3, 4, 5]
+    private penalties = [1, 2, 3, 4, 5];
 }
 export default RulesMixin;

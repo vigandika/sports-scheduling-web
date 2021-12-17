@@ -48,7 +48,7 @@
               v-for="team in teams"
               :key="team.id"
             >
-              <v-col cols="1" sm="4">
+              <v-col cols="10" sm="4">
                 <v-text-field
                   v-model="team.name"
                   :label="`Team ${team.id}`"
@@ -57,7 +57,7 @@
                 </v-text-field>
               </v-col>
 
-              <v-col cols="1" sm="2">
+              <v-col cols="10" sm="2">
                 <v-select
                   v-model="team.category"
                   required
@@ -88,26 +88,35 @@
           <v-row justify="center">
             <v-expansion-panels inset>
               <v-expansion-panel>
-                <v-expansion-panel-header
-                  >StaticVenueConstraint (HARD)</v-expansion-panel-header
-                >
+                <v-expansion-panel-header>
+                  StaticVenueConstraint (HARD)
+                </v-expansion-panel-header>
                 <v-expansion-panel-content> </v-expansion-panel-content>
               </v-expansion-panel>
 
               <v-expansion-panel>
-                <v-expansion-panel-header
-                  >OpponentConstraint (SOFT)</v-expansion-panel-header
-                >
+                <v-expansion-panel-header>
+                  OpponentConstraint (SOFT)
+                </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  <opponent-constraint-panel :teams="teams">
+                  <opponent-constraint-panel
+                    :teams="teams"
+                    :matchweeks="matchweeks"
+                  >
                   </opponent-constraint-panel>
                 </v-expansion-panel-content>
               </v-expansion-panel>
 
               <v-expansion-panel>
-                <v-expansion-panel-header>Panel 3</v-expansion-panel-header>
+                <v-expansion-panel-header>
+                  VenueConstraint (SOFT)
+                </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                  Some content
+                  <venue-constraint-panel
+                    :teams="teams"
+                    :matchweeks="matchweeks"
+                  >
+                  </venue-constraint-panel>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
@@ -120,14 +129,15 @@
 
   <script lang="ts">
 import { Component, Vue, Mixins } from "vue-property-decorator";
-import { OpponentConstraint } from "@/models/OpponentConstraint";
 import OpponentConstraintPanel from "@/components/OpponentConstraintPanel.vue";
+import VenueConstraintPanel from "@/components/VenueConstraintPanel.vue";
 import { Team } from "@/models/Team";
-import RulesMixin  from "@/mixins/RulesMixin";
+import RulesMixin from "@/mixins/RulesMixin";
 
 @Component({
   components: {
     OpponentConstraintPanel,
+    VenueConstraintPanel,
   },
 })
 export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
@@ -147,6 +157,16 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
     } else {
       console.error("numberOfTeams is null before stepping to step 2");
     }
+  }
+
+  get matchweeks() {
+    let matchweeks: Array<number> = [];
+    if (this.numberOfTeams !== null) {
+      for (let index = 1; index <= (this.numberOfTeams - 1) * 2; index++) {
+        matchweeks.push(index);
+      }
+    }
+    return matchweeks;
   }
 }
 </script>

@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <v-form ref="opponentConstraintForm" v-model="opponentConstraintFormValid">
+    <v-form ref="venueConstraintForm" v-model="venueConstraintFormValid">
       <v-row
         align="center"
         justify="center"
-        v-for="(opponentConstraint, index) in opponentConstraints"
+        v-for="(venueConstraint, index) in venueConstraints"
         :key="index"
       >
         <v-col cols="10" sm="4">
           <v-select
             required
-            v-model="opponentConstraint.teamId"
+            v-model="venueConstraint.teamId"
             :items="teams"
             item-text="name"
             item-value="id"
@@ -18,30 +18,20 @@
             :rules="[rules.required]"
             return-object
           >
-            <!-- should return object be used? -->
           </v-select>
         </v-col>
-
-        <v-col cols="10" sm="4">
-          <v-select
-            required
-            v-model="opponentConstraint.opponentId"
-            :items="teams"
-            item-text="name"
-            item-value="id"
-            label="Team"
-            :rules="[rules.required]"
-            return-object
-          >
-            <!-- should return object be used? -->
-          </v-select>
+        <v-col cols="10" sm="3">
+          <v-radio-group row align="center" justify="center" :style="{padding: '0 0 0 50px'}" v-model="venueConstraint.venue">
+            <v-radio label="Home" value="H"></v-radio>
+            <v-radio label="Away" value="A"></v-radio>
+          </v-radio-group>
         </v-col>
 
-        <v-col cols="10" sm="2">
+        <v-col cols="10" sm="">
           <v-select
             required
-            v-model="opponentConstraint.matchweek"
-            :items="matchweeks"
+            v-model="venueConstraint.matchweek"
+            :items="[1,2,3,4,5]"
             label="Matchweek"
             :rules="[rules.required]"
           >
@@ -49,9 +39,10 @@
         </v-col>
 
         <v-col cols="10" sm="2">
-          <penalty-slider @update-penalty="updatePenalty($event, opponentConstraint)" />
+          <penalty-slider
+            @update-penalty="updatePenalty($event, venueConstraint)"
+          />
         </v-col>
-
       </v-row>
     </v-form>
     <v-btn
@@ -59,7 +50,7 @@
       block
       class="add-btn"
       color="primary"
-      @click="addOpponentConstraint"
+      @click="addVenueConstraint"
     >
       <v-icon>mdi-plus-circle-outline</v-icon>
     </v-btn>
@@ -72,26 +63,28 @@ import { PropType } from "vue";
 import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
-import PenaltySlider from "@/components/shared/PenaltySlider.vue"
+import PenaltySlider from "@/components/shared/PenaltySlider.vue";
+import { VenueConstraint } from "@/models/VenueConstraint";
 
 @Component({
-  name: "OpponentConstraintPanel",
+  name: "VenueConstraintPanel",
   components: {
-    PenaltySlider
-  }
+    PenaltySlider,
+  },
 })
-export default class OpponentConstraintPanel extends Mixins(Vue, RulesMixin) {
+export default class VenueConstraintPanel extends Mixins(Vue, RulesMixin) {
   @Prop({ type: Array as PropType<Team[]>, required: true })
   private teams: Team[] | undefined;
 
   @Prop({ type: Array as PropType<Number[]>, required: true })
   private matchweeks: number[] | undefined;
 
-  private opponentConstraints: Array<OpponentConstraint> = [];
-  private opponentFormValid: boolean = false;
+private venueConstraints: Array<VenueConstraint> = [];
+  private venueConstraintFormValid: boolean = false;
 
-  private addOpponentConstraint(): void {
-    this.opponentConstraints.push(new OpponentConstraint());
+
+  private addVenueConstraint(): void {
+    this.venueConstraints.push(new VenueConstraint());
   }
 
   private updatePenalty(penalty: number, constraint: OpponentConstraint) {

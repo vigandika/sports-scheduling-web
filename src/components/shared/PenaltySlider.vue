@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-subheader class="ma-0 pa-0" >
+    <v-subheader class="ma-0 pa-0">
       Penalty&nbsp;
       <v-tooltip top>
         <template v-slot:activator="{ on, attrs }">
