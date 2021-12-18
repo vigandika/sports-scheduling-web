@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-    <p>Set the minimum number of rounds to be played before two teams meet for the second time.</p>
+    <i style="color: gray;">Set the minimum number of rounds to be played before two teams meet for the second time.</i>
 
 		<v-form ref="repeaterGapConstraintForm" v-model="repeaterGapConstraintFormValid">
 			<v-row align="center" justify="center" v-for="(repeaterGapConstraint, index) in repeaterGapConstraints" :key="index">
@@ -8,6 +8,7 @@
 					<v-select
 						required
 						v-model="repeaterGapConstraint.team1Id"
+						color="secondary"
 						:items="teams"
 						item-text="name"
 						item-value="id"
@@ -22,6 +23,7 @@
 					<v-select
 						required
 						v-model="repeaterGapConstraint.team2Id"
+						color="secondary"
 						:items="teams"
 						item-text="name"
 						item-value="id"
@@ -35,6 +37,7 @@
 				<v-col cols="10" sm="2">
 					<v-text-field
 						v-model="repeaterGapConstraint.minimumGap"
+						color="secondary"
 						label="Minimum Gap"
 						type="number"
 						:rules="[rules.required, repeaterGapRules.minimumGap]"
@@ -47,7 +50,7 @@
 				</v-col>
 			</v-row>
 		</v-form>
-		<v-btn icon block class="add-btn" color="primary" @click="addRepeaterGapConstraint">
+		<v-btn icon block class="add-btn" color="secondary" @click="addRepeaterGapConstraint">
 			<v-icon>mdi-plus-circle-outline</v-icon>
 		</v-btn>
 	</v-container>

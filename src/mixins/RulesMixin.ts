@@ -15,7 +15,8 @@ class RulesMixin extends Vue {
     private penalties = [1, 2, 3, 4, 5];
 
     protected getSharedVenuePairsMax(numberOFTeams: number) {
-        return numberOFTeams < 10 ? 2 : 4;
+        // For every 5 teams, one extra pair of teams with shared venue status is added
+        return Math.floor(numberOFTeams / 5) + 1;
     }
 }
 export default RulesMixin;

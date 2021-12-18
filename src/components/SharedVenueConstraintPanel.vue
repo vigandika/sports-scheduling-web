@@ -1,14 +1,15 @@
 <template>
 	<v-container>
-		<p>
+		<i style="color: gray;">
 			Identify teams that share the home venue. The pair of teams sharing a venue will have complementary Home-Away playing patterns.
-		</p>
+		</i>
 
 		<v-form ref="sharedVenueConstraintForm" v-model="sharedVenueConstraintFormValid" :lazy-validation="true">
 			<v-row align="center" justify="center" v-for="(teamPair, index) in sharedVenueConstraint.teamPairs" :key="index">
 				<v-col cols="10" sm="4">
 					<v-select
 						required
+						color="secondary"
 						:items="teams"
 						:item-disabled="disableTeam"
 						item-text="name"
@@ -23,6 +24,7 @@
 				<v-col cols="10" sm="4">
 					<v-select
 						required
+						color="secondary"
 						:items="teams"
 						:item-disabled="disableTeam"
 						item-text="name"
@@ -40,7 +42,7 @@
 			icon
 			block
 			class="add-btn"
-			color="primary"
+			color="secondary"
 			@click="addTeamPair"
 		>
 			<v-icon>mdi-plus-circle-outline</v-icon>

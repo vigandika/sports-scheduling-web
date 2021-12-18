@@ -16,6 +16,7 @@
     </v-subheader>
     <v-slider
       v-model="penalty"
+      color="secondary"
       :tick-labels="[1, '', '', '', 5]"
       :min="1"
       :max="5"

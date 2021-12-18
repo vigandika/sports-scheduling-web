@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <p>Forbid a team to play against an opponent in a specific matchweek.</p>
+    <i style="color: gray;">Forbid a team to play against an opponent in a specific matchweek.</i>
 
     <v-form ref="opponentConstraintForm" v-model="opponentConstraintFormValid">
       <v-row
@@ -13,6 +13,7 @@
           <v-select
             required
             v-model="opponentConstraint.teamId"
+            color="secondary"
             :items="teams"
             item-text="name"
             item-value="id"
@@ -28,6 +29,7 @@
           <v-select
             required
             v-model="opponentConstraint.opponentId"
+            color="secondary"
             :items="teams"
             item-text="name"
             item-value="id"
@@ -43,6 +45,7 @@
           <v-select
             required
             v-model="opponentConstraint.matchweek"
+            color="secondary"
             :items="matchweeks"
             label="Matchweek"
             :rules="[rules.required]"
@@ -60,7 +63,7 @@
       icon
       block
       class="add-btn"
-      color="primary"
+      color="secondary"
       @click="addOpponentConstraint"
     >
       <v-icon>mdi-plus-circle-outline</v-icon>

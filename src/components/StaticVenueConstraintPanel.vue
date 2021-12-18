@@ -1,12 +1,13 @@
 <template>
 	<v-container>
-		<p>Limit the number of <b :style="{ color: '#1976d2' }">consecutive</b> games a team can play in the same venue.</p>
+		<i style="color: gray;">Limit the number of <b :style="{ color: '#79a8a9' }">consecutive</b> games a team can play in the same venue.</i>
 
 		<v-form ref="staticVenueConstraintForm" v-model="staticVenueConstraintFormValid">
 			<v-row>
-				<v-col cols="10" sm="6">
+				<v-col cols="10" sm="7">
 					<v-text-field
 						v-model="staticVenueConstraint.maximum"
+						color="secondary"
 						label="Maximum number of consecutive games played at the same venue"
 						type="number"
 						:rules="[rules.required, staticVenueRules.minimumGap]"
