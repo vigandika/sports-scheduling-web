@@ -14,7 +14,6 @@
 						item-value="id"
 						label="Team"
 						:rules="[rules.required]"
-						return-object
 					>
 					</v-select>
 				</v-col>
@@ -69,7 +68,7 @@ export default class VenueConstraintPanel extends Mixins(Vue, RulesMixin) {
 	@Prop({ type: Array as PropType<Number[]>, required: true })
 	private matchweeks: number[] | undefined;
 
-	private venueConstraints: Array<VenueConstraint> = [];
+	public venueConstraints: Array<VenueConstraint> = [];
 	private venueConstraintFormValid: boolean = false;
 
 	private addVenueConstraint(): void {

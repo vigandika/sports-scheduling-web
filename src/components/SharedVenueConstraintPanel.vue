@@ -67,7 +67,7 @@ export default class SharedVenueConstraintPanel extends Mixins(Vue, RulesMixin) 
 	@Prop({ type: Array as PropType<Team[]>, required: true })
 	private teams: Team[] | undefined;
 
-	private sharedVenueConstraint = new SharedVenueConstraint([]);
+	public sharedVenueConstraint = new SharedVenueConstraint([]);
 	private sharedVenueConstraintFormValid: boolean = false;
 	private selectedTeams: Array<Team> = [];
 

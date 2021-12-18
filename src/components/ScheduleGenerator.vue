@@ -113,7 +113,10 @@
 							<v-expansion-panel>
 								<v-expansion-panel-header> StaticVenueConstraint (HARD) </v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<static-venue-constraint-panel :numberOfMatchweeks="numberOfMatchweeks">
+									<static-venue-constraint-panel
+										ref="staticVenueConstraintPanel"
+										:numberOfMatchweeks="numberOfMatchweeks"
+									>
 									</static-venue-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
@@ -121,28 +124,32 @@
 							<v-expansion-panel>
 								<v-expansion-panel-header> SharedVenueConstraint (HARD) </v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<shared-venue-constraint-panel :teams="teams"> </shared-venue-constraint-panel>
+									<shared-venue-constraint-panel ref="sharedVenueConstraintPanel" :teams="teams">
+									</shared-venue-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 
 							<v-expansion-panel>
 								<v-expansion-panel-header> OpponentConstraint (SOFT) </v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<opponent-constraint-panel :teams="teams" :matchweeks="matchweeks"> </opponent-constraint-panel>
+									<opponent-constraint-panel ref="opponentConstraintPanel" :teams="teams" :matchweeks="matchweeks">
+									</opponent-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 
 							<v-expansion-panel>
 								<v-expansion-panel-header> VenueConstraint (SOFT) </v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<venue-constraint-panel :teams="teams" :matchweeks="matchweeks"> </venue-constraint-panel>
+									<venue-constraint-panel ref="venueConstraintPanel" :teams="teams" :matchweeks="matchweeks">
+									</venue-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 
 							<v-expansion-panel>
 								<v-expansion-panel-header> RepeaterGapConstraint (SOFT) </v-expansion-panel-header>
 								<v-expansion-panel-content>
-									<repeater-gap-constraint-panel :teams="teams" :matchweeks="matchweeks"> </repeater-gap-constraint-panel>
+									<repeater-gap-constraint-panel ref="repeaterGapConstraintPanel" :teams="teams" :matchweeks="matchweeks">
+									</repeater-gap-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
 						</v-expansion-panels>
@@ -150,6 +157,7 @@
 				</v-stepper-content>
 			</v-stepper-items>
 		</v-stepper>
+		<v-btn @click="constraintsComplete"> A</v-btn>
 	</v-container>
 </template>
 
@@ -162,6 +170,9 @@ import VenueConstraintPanel from "@/components/VenueConstraintPanel.vue";
 import RepeaterGapConstraintPanel from "@/components/RepeaterGapConstraintPanel.vue";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
+import { ParticipationConstraint } from "@/models/ParticipationConstraint";
+import { EncounterConstraint } from "@/models/EncounterConstraint";
+import { CompleteCycleConstraint } from "@/models/CompleteCycleConstraint";
 
 @Component({
 	components: {
@@ -178,6 +189,7 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 	private e1 = 1;
 	private firstStepValid = true;
 	private secondStepValid = true;
+	private constraints: Array<Object> = [];
 	private isOkay = false;
 
 	private finishFirstStep() {
@@ -188,6 +200,36 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 			}
 		} else {
 			console.error("numberOfTeams is null before stepping to step 2");
+		}
+	}
+
+	private constraintsComplete() {
+		// push constraints enforced by default
+		this.constraints?.push(new ParticipationConstraint(), new EncounterConstraint(), new CompleteCycleConstraint());
+
+		// If Static Venue Constraint is given
+		if (this.$refs.sharedVenueConstraintPanel !== undefined) {
+			this.constraints?.push((<StaticVenueConstraintPanel>this.$refs.staticVenueConstraintPanel).staticVenueConstraint);
+		}
+
+		// If shared Venue Constraint is given
+		if (this.$refs.sharedVenueConstraintPanel !== undefined) {
+			this.constraints?.push((<SharedVenueConstraintPanel>this.$refs.sharedVenueConstraintPanel).sharedVenueConstraint);
+		}
+
+		// If Opponent Constraint is given
+		if (this.$refs.opponentConstraintPanel !== undefined) {
+			this.constraints?.push((<OpponentConstraintPanel>this.$refs.opponentConstraintPanel).opponentConstraints);
+		}
+
+		// If Venue Constraint is given
+		if (this.$refs.venueConstraintPanel !== undefined) {
+			this.constraints?.push((<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraints);
+		}
+
+		// If Repeater Gap Constraint is given
+		if (this.$refs.repeaterGapConstraintPanel !== undefined) {
+			this.constraints?.push((<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraints);
 		}
 	}
 

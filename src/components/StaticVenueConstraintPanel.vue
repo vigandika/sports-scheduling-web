@@ -31,7 +31,7 @@ export default class StaticVenueConstraintPanel extends Mixins(Vue, RulesMixin) 
 	@Prop({ type: Number, required: true })
 	private numberOfMatchweeks: number | undefined;
 
-	private staticVenueConstraint = new StaticVenueConstraint();
+	public staticVenueConstraint = new StaticVenueConstraint();
 	private staticVenueConstraintFormValid: boolean = false;
 
 	staticVenueRules = {

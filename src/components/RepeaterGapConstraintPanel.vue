@@ -14,7 +14,6 @@
 						item-value="id"
 						label="Team"
 						:rules="[rules.required]"
-						return-object
 					>
 					</v-select>
 				</v-col>
@@ -29,7 +28,6 @@
 						item-value="id"
 						label="Team"
 						:rules="[rules.required]"
-						return-object
 					>
 					</v-select>
 				</v-col>
@@ -77,7 +75,7 @@ export default class RepeaterGapConstraintPanel extends Mixins(Vue, RulesMixin) 
 	@Prop({ type: Array as PropType<Number[]>, required: true })
 	private matchweeks: number[] | undefined;
 
-	private repeaterGapConstraints: Array<RepeaterGapConstraint> = [];
+	public repeaterGapConstraints: Array<RepeaterGapConstraint> = [];
 	private repeaterGapConstraintFormValid: boolean = false;
 
 	private addRepeaterGapConstraint(): void {

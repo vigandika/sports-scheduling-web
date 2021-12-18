@@ -19,7 +19,6 @@
             item-value="id"
             label="Team"
             :rules="[rules.required]"
-            return-object
           >
             <!-- should return object be used? -->
           </v-select>
@@ -35,7 +34,6 @@
             item-value="id"
             label="Team"
             :rules="[rules.required]"
-            return-object
           >
             <!-- should return object be used? -->
           </v-select>
@@ -92,7 +90,7 @@ export default class OpponentConstraintPanel extends Mixins(Vue, RulesMixin) {
   @Prop({ type: Array as PropType<Number[]>, required: true })
   private matchweeks: number[] | undefined;
 
-  private opponentConstraints: Array<OpponentConstraint> = [];
+  public opponentConstraints: Array<OpponentConstraint> = [];
   private opponentConstraintFormValid: boolean = false;
 
   private addOpponentConstraint(): void {
