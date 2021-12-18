@@ -35,10 +35,19 @@
 				</v-col>
 			</v-row>
 		</v-form>
-		<v-btn v-if="sharedVenueConstraint.teamPairs.length < sharedVenuePairsMax" icon block class="add-btn" color="primary" @click="addTeamPair">
+		<v-btn
+			v-if="sharedVenueConstraint.teamPairs.length < sharedVenuePairsMax"
+			icon
+			block
+			class="add-btn"
+			color="primary"
+			@click="addTeamPair"
+		>
 			<v-icon>mdi-plus-circle-outline</v-icon>
 		</v-btn>
-		<p align-center justify-center v-else>The maximum number of shared venue pairs for {{teams.length}} is {{sharedVenuePairsMax}} </p>
+		<p v-else class="text-caption text-sm-center text-xs-center">
+			The maximum number of shared venue pairs for {{ teams.length }} teams is {{ sharedVenuePairsMax }}
+		</p>
 	</v-container>
 </template>
 
@@ -91,7 +100,7 @@ export default class SharedVenueConstraintPanel extends Mixins(Vue, RulesMixin) 
 		if (this.teams !== undefined) {
 			return this.getSharedVenuePairsMax(this.teams?.length);
 		} else {
-			console.error('teams is undefined');
+			console.error("teams is undefined");
 		}
 	}
 }
