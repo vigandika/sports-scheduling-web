@@ -20,7 +20,6 @@
             label="Team"
             :rules="[rules.required]"
           >
-            <!-- should return object be used? -->
           </v-select>
         </v-col>
 
@@ -35,7 +34,6 @@
             label="Team"
             :rules="[rules.required]"
           >
-            <!-- should return object be used? -->
           </v-select>
         </v-col>
 
