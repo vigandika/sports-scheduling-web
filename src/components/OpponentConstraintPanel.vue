@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <p>Forbid a team to play against an opponent in a specific matchweek.</p>
+
     <v-form ref="opponentConstraintForm" v-model="opponentConstraintFormValid">
       <v-row
         align="center"

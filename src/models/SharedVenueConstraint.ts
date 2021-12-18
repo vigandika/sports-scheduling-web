@@ -1,12 +1,13 @@
 export class SharedVenueConstraint {
     type: string;
     level: string;
-    teams: number[][];
+    teamPairs?: number[][];
     
-
-    constructor(teams: number[][]) {
+    constructor();
+    constructor(teamPairs: number[][]);
+    constructor(teamPairs?: number[][]) {
         this.type = "SharedVenueConstraint";
         this.level = "HARD";
-        this.teams = teams;
+        this.teamPairs = teamPairs;
     }
 }
