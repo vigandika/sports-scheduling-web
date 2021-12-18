@@ -3,7 +3,7 @@ export class EncounterConstraint {
     private level: string;
 
     constructor() {
-        this.type = "EncounterConstraint";
+        this.type = "encounterConstraint";
         this.level = "HARD";
     }
 }

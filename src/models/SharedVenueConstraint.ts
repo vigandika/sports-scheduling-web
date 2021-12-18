@@ -6,7 +6,7 @@ export class SharedVenueConstraint {
     constructor();
     constructor(teamPairs: number[][]);
     constructor(teamPairs?: number[][]) {
-        this.type = "SharedVenueConstraint";
+        this.type = "sharedVenueConstraint";
         this.level = "HARD";
         this.teamPairs = teamPairs;
     }

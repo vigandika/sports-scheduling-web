@@ -3,7 +3,7 @@ export class CompleteCycleConstraint {
     private level: string;
 
     constructor() {
-        this.type = "CompleteCycleConstraint";
+        this.type = "completeCycleConstraint";
         this.level = "HARD";
     }
 }

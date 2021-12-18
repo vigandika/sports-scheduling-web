@@ -5,7 +5,7 @@ export class StaticVenueConstraint {
     
     constructor();
     constructor(maximum?: number) {
-        this.type = "StaticVenueConstraint";
+        this.type = "staticVenueConstraint";
         this.level = "HARD";
         this.maximum = maximum;
     }

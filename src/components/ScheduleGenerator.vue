@@ -208,7 +208,7 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 		this.constraints?.push(new ParticipationConstraint(), new EncounterConstraint(), new CompleteCycleConstraint());
 
 		// If Static Venue Constraint is given
-		if (this.$refs.sharedVenueConstraintPanel !== undefined) {
+		if (this.$refs.staticVenueConstraintPanel !== undefined) {
 			this.constraints?.push((<StaticVenueConstraintPanel>this.$refs.staticVenueConstraintPanel).staticVenueConstraint);
 		}
 

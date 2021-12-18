@@ -3,7 +3,7 @@ export class ParticipationConstraint {
     private level: string;
 
     constructor() {
-        this.type = "ParticipationConstraint";
+        this.type = "participationConstraint";
         this.level = "HARD";
     }
 }
