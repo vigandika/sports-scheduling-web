@@ -92,7 +92,8 @@ export default class OpponentConstraintPanel extends Mixins(Vue, RulesMixin) {
   private opponentConstraintFormValid: boolean = false;
 
   private addOpponentConstraint(): void {
-    this.opponentConstraints.push(new OpponentConstraint());
+    // Add constraint with an initial penalty value of 1
+    this.opponentConstraints.push(new OpponentConstraint(1));
   }
 
   private updatePenalty(penalty: number, constraint: OpponentConstraint) {

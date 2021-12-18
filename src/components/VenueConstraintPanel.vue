@@ -72,7 +72,8 @@ export default class VenueConstraintPanel extends Mixins(Vue, RulesMixin) {
 	private venueConstraintFormValid: boolean = false;
 
 	private addVenueConstraint(): void {
-		this.venueConstraints.push(new VenueConstraint());
+		// Add constraint with an initial penalty value of 1
+		this.venueConstraints.push(new VenueConstraint(1));
 	}
 
 	private updatePenalty(penalty: number, constraint: VenueConstraint) {

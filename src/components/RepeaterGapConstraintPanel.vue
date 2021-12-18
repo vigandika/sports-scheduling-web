@@ -79,7 +79,8 @@ export default class RepeaterGapConstraintPanel extends Mixins(Vue, RulesMixin) 
 	private repeaterGapConstraintFormValid: boolean = false;
 
 	private addRepeaterGapConstraint(): void {
-		this.repeaterGapConstraints.push(new RepeaterGapConstraint());
+		// Add constraint with an initial penalty value of 1
+		this.repeaterGapConstraints.push(new RepeaterGapConstraint(1));
 	}
 
 	private updatePenalty(penalty: number, constraint: RepeaterGapConstraint) {

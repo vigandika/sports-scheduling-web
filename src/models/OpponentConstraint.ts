@@ -1,18 +1,19 @@
 export class OpponentConstraint {
     type: string;
     level: string;
+    penalty?: number;
     teamId?: number;
     opponentId?: number;
     matchweek?: number;
-    penalty?: number;
     
     constructor();
-    constructor(teamId?: number, opponentId?: number, matchweek?: number, penalty?: number) {
+    constructor(penalty: number);
+    constructor(penalty?: number, teamId?: number, opponentId?: number, matchweek?: number) {
         this.type = "opponentConstraint";
         this.level = "SOFT";
+        this.penalty = penalty;
         this.teamId = teamId;
         this.opponentId = opponentId;
         this.matchweek = matchweek;
-        this.penalty = penalty;
     }
 }
