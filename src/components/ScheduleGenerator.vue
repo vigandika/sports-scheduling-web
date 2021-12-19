@@ -219,18 +219,28 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 
 		// If Opponent Constraint is given
 		if (this.$refs.opponentConstraintPanel !== undefined) {
-			this.constraints?.push((<OpponentConstraintPanel>this.$refs.opponentConstraintPanel).opponentConstraints);
+			// Since soft constraints can be unlimited in number, `opponentConstraints` is an array
+			(<OpponentConstraintPanel>this.$refs.opponentConstraintPanel).opponentConstraints.forEach((opponentConstraint) =>
+				this.constraints.push(opponentConstraint)
+			);
+
 		}
 
 		// If Venue Constraint is given
 		if (this.$refs.venueConstraintPanel !== undefined) {
-			this.constraints?.push((<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraints);
+			(<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraints.forEach((venueConstraint) => 
+				this.constraints.push(venueConstraint)
+			);
 		}
 
 		// If Repeater Gap Constraint is given
 		if (this.$refs.repeaterGapConstraintPanel !== undefined) {
-			this.constraints?.push((<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraints);
+			(<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraints.forEach((repeaterGapConstraint) => 
+				this.constraints.push(repeaterGapConstraint)
+			);
 		}
+
+		console.log(JSON.stringify(this.constraints));
 	}
 
 	get matchweeks() {

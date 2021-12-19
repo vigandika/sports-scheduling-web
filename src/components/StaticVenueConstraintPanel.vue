@@ -6,7 +6,7 @@
 			<v-row>
 				<v-col cols="10" sm="7">
 					<v-text-field
-						v-model="staticVenueConstraint.maximum"
+						v-model.number="staticVenueConstraint.maximum"
 						color="secondary"
 						label="Maximum number of consecutive games played at the same venue"
 						type="number"

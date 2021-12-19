@@ -34,7 +34,7 @@
 
 				<v-col cols="10" sm="2">
 					<v-text-field
-						v-model="repeaterGapConstraint.minimumGap"
+						v-model.number="repeaterGapConstraint.minimumGap"
 						color="secondary"
 						label="Minimum Gap"
 						type="number"
