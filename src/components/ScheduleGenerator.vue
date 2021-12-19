@@ -161,10 +161,23 @@
 							</v-expansion-panel>
 						</v-expansion-panels>
 					</v-row>
+					<v-row>
+						<v-col class="text-right">
+							<v-btn
+								:loading="loading"
+								:disabled="loading"
+								color="secondary"
+								class="ma-2 white--text"
+								@click="generateSchedule()"
+							>
+								Generate Schedule
+								<v-icon right dark> mdi-magic-staff </v-icon>
+							</v-btn>
+						</v-col>
+					</v-row>
 				</v-stepper-content>
 			</v-stepper-items>
 		</v-stepper>
-		<v-btn @click="constraintsComplete"> A</v-btn>
 	</v-container>
 </template>
 
@@ -200,6 +213,7 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 	private secondStepValid = true;
 	private constraints: Array<Object> = [];
 	private isOkay = false;
+	private loading = false;
 
 	private finishFirstStep() {
 		this.e1 = 2;
@@ -212,7 +226,7 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 		}
 	}
 
-	private constraintsComplete() {
+	private generateSchedule() {
 		// push constraints enforced by default
 		this.constraints?.push(new ParticipationConstraint(), new EncounterConstraint(), new CompleteCycleConstraint());
 
@@ -253,6 +267,17 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 		}
 
 		console.log(JSON.stringify(this.constraints));
+		this.axios
+			.post("http://127.0.0.1:9090/schedule", {
+				teams: this.teams,
+				constraints: this.constraints,
+			})
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 	}
 
 	get matchweeks() {
