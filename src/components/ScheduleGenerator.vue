@@ -152,6 +152,13 @@
 									</repeater-gap-constraint-panel>
 								</v-expansion-panel-content>
 							</v-expansion-panel>
+
+							<v-expansion-panel>
+								<v-expansion-panel-header> FairnessConstraint (SOFT) </v-expansion-panel-header>
+								<v-expansion-panel-content>
+									<fairness-constraint-panel ref="fairnessConstraintPanel" :teams="teams"> </fairness-constraint-panel>
+								</v-expansion-panel-content>
+							</v-expansion-panel>
 						</v-expansion-panels>
 					</v-row>
 				</v-stepper-content>
@@ -168,6 +175,7 @@ import SharedVenueConstraintPanel from "@/components/SharedVenueConstraintPanel.
 import OpponentConstraintPanel from "@/components/OpponentConstraintPanel.vue";
 import VenueConstraintPanel from "@/components/VenueConstraintPanel.vue";
 import RepeaterGapConstraintPanel from "@/components/RepeaterGapConstraintPanel.vue";
+import FairnessConstraintPanel from "@/components/FairnessConstraintPanel.vue";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
 import { ParticipationConstraint } from "@/models/ParticipationConstraint";
@@ -181,6 +189,7 @@ import { CompleteCycleConstraint } from "@/models/CompleteCycleConstraint";
 		VenueConstraintPanel,
 		RepeaterGapConstraintPanel,
 		SharedVenueConstraintPanel,
+		FairnessConstraintPanel,
 	},
 })
 export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
@@ -223,21 +232,24 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 			(<OpponentConstraintPanel>this.$refs.opponentConstraintPanel).opponentConstraints.forEach((opponentConstraint) =>
 				this.constraints.push(opponentConstraint)
 			);
-
 		}
 
 		// If Venue Constraint is given
 		if (this.$refs.venueConstraintPanel !== undefined) {
-			(<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraints.forEach((venueConstraint) => 
+			(<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraints.forEach((venueConstraint) =>
 				this.constraints.push(venueConstraint)
 			);
 		}
 
 		// If Repeater Gap Constraint is given
 		if (this.$refs.repeaterGapConstraintPanel !== undefined) {
-			(<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraints.forEach((repeaterGapConstraint) => 
+			(<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraints.forEach((repeaterGapConstraint) =>
 				this.constraints.push(repeaterGapConstraint)
 			);
+		}
+
+		if (this.$refs.fairnessConstraintPanel !== undefined) {
+			this.constraints?.push((<FairnessConstraintPanel>this.$refs.fairnessConstraintPanel).fairnessConstraint);
 		}
 
 		console.log(JSON.stringify(this.constraints));
