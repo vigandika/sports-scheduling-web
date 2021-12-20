@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    <router-view></router-view>
     <v-main class="body">
-      <schedule-generator/>
     </v-main>
   </v-app>
 </template>
@@ -20,10 +20,11 @@ export default class App extends Vue {}
 </script>
 
 <style>
-.body {
+#app {
 	background-image: url(./assets/background-9.png);
 	/* background-color: #cccccc; */
   /* background-size: cover; */
   background-position: bottom;
+  background-repeat: no-repeat;
 }
 </style>
