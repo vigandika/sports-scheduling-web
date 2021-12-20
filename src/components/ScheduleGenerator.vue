@@ -8,7 +8,9 @@
 		</i>
 		<br /><br />
 
-		<v-stepper v-model="e1" color="secondary">
+		<fixture-list v-if="scheduleGenerated" :fixtureList="fixtureList"> </fixture-list>
+
+		<v-stepper v-else v-model="e1" color="secondary">
 			<v-stepper-header>
 				<v-stepper-step :complete="e1 > 1" step="1" color="secondary">Competition</v-stepper-step>
 
@@ -64,7 +66,7 @@
 						<v-icon>mdi-chevron-left</v-icon>
 					</v-btn>
 
-					<v-btn icon color="secondary" @click="e1 = 3" :disabled="secondStepValid">
+					<v-btn icon color="secondary" @click="e1 = 3" :disabled="!secondStepValid">
 						<v-icon>mdi-chevron-right</v-icon>
 					</v-btn>
 				</v-stepper-content>
@@ -189,6 +191,7 @@ import OpponentConstraintPanel from "@/components/OpponentConstraintPanel.vue";
 import VenueConstraintPanel from "@/components/VenueConstraintPanel.vue";
 import RepeaterGapConstraintPanel from "@/components/RepeaterGapConstraintPanel.vue";
 import FairnessConstraintPanel from "@/components/FairnessConstraintPanel.vue";
+import FixtureList from "@/components/FixtureList.vue";
 import { Team } from "@/models/Team";
 import RulesMixin from "@/mixins/RulesMixin";
 import { ParticipationConstraint } from "@/models/ParticipationConstraint";
@@ -203,6 +206,7 @@ import { CompleteCycleConstraint } from "@/models/CompleteCycleConstraint";
 		RepeaterGapConstraintPanel,
 		SharedVenueConstraintPanel,
 		FairnessConstraintPanel,
+		FixtureList,
 	},
 })
 export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
@@ -214,6 +218,8 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 	private constraints: Array<Object> = [];
 	private isOkay = false;
 	private loading = false;
+	private scheduleGenerated: boolean = false;
+	private fixtureList: Object | null = null;
 
 	private finishFirstStep() {
 		this.e1 = 2;
@@ -266,14 +272,14 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 			this.constraints?.push((<FairnessConstraintPanel>this.$refs.fairnessConstraintPanel).fairnessConstraint);
 		}
 
-		console.log(JSON.stringify(this.constraints));
 		this.axios
 			.post("http://127.0.0.1:9090/schedule", {
 				teams: this.teams,
 				constraints: this.constraints,
 			})
-			.then(function (response) {
-				console.log(response);
+			.then((response) => {
+				this.fixtureList = response.data.matchweeks;
+				this.scheduleGenerated = true;
 			})
 			.catch(function (error) {
 				console.log(error);
