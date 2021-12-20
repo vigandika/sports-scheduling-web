@@ -68,7 +68,7 @@ export default class SharedVenueConstraintPanel extends Mixins(Vue, RulesMixin) 
 	private teams: Team[] | undefined;
 
 	public sharedVenueConstraint = new SharedVenueConstraint([]);
-	private sharedVenueConstraintFormValid: boolean = false;
+	public sharedVenueConstraintFormValid: boolean = false;
 	private selectedTeams: Array<Team> = [];
 
 	private addTeamPair(): void {

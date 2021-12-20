@@ -89,7 +89,7 @@ export default class OpponentConstraintPanel extends Mixins(Vue, RulesMixin) {
   private matchweeks: number[] | undefined;
 
   public opponentConstraints: Array<OpponentConstraint> = [];
-  private opponentConstraintFormValid: boolean = false;
+  public opponentConstraintFormValid: boolean = false;
 
   private addOpponentConstraint(): void {
     // Add constraint with an initial penalty value of 1

@@ -69,7 +69,7 @@ export default class VenueConstraintPanel extends Mixins(Vue, RulesMixin) {
 	private matchweeks: number[] | undefined;
 
 	public venueConstraints: Array<VenueConstraint> = [];
-	private venueConstraintFormValid: boolean = false;
+	public venueConstraintFormValid: boolean = false;
 
 	private addVenueConstraint(): void {
 		// Add constraint with an initial penalty value of 1

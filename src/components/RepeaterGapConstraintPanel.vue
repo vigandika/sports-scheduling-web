@@ -76,7 +76,7 @@ export default class RepeaterGapConstraintPanel extends Mixins(Vue, RulesMixin) 
 	private matchweeks: number[] | undefined;
 
 	public repeaterGapConstraints: Array<RepeaterGapConstraint> = [];
-	private repeaterGapConstraintFormValid: boolean = false;
+	public repeaterGapConstraintFormValid: boolean = false;
 
 	private addRepeaterGapConstraint(): void {
 		// Add constraint with an initial penalty value of 1

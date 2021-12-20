@@ -10,17 +10,17 @@
 
 		<fixture-list v-if="scheduleGenerated" :fixtureList="fixtureList"> </fixture-list>
 
-		<v-stepper v-else v-model="e1" color="secondary">
+		<v-stepper v-else v-model="step" color="secondary">
 			<v-stepper-header>
-				<v-stepper-step :complete="e1 > 1" step="1" color="secondary">Competition</v-stepper-step>
+				<v-stepper-step :complete="step > 1" step="1" color="secondary">Competition</v-stepper-step>
 
 				<v-divider></v-divider>
 
-				<v-stepper-step :complete="e1 > 2" step="2" color="secondary">Teams</v-stepper-step>
+				<v-stepper-step :complete="step > 2" step="2" color="secondary">Teams</v-stepper-step>
 
 				<v-divider></v-divider>
 
-				<v-stepper-step step="3" :complete="isOkay" color="secondary">Constraints</v-stepper-step>
+				<v-stepper-step step="3" :complete="false" color="secondary">Constraints</v-stepper-step>
 			</v-stepper-header>
 
 			<v-stepper-items>
@@ -62,18 +62,18 @@
 						</v-row>
 					</v-form>
 
-					<v-btn icon @click="e1 = 1" color="secondary">
+					<v-btn icon @click="goToFirstStep()" color="secondary">
 						<v-icon>mdi-chevron-left</v-icon>
 					</v-btn>
 
-					<v-btn icon color="secondary" @click="e1 = 3" :disabled="!secondStepValid">
+					<v-btn icon color="secondary" @click="step = 3" :disabled="!secondStepValid">
 						<v-icon>mdi-chevron-right</v-icon>
 					</v-btn>
 				</v-stepper-content>
 
 				<v-stepper-content step="3">
 					<v-row justify="center">
-						<v-expansion-panels inset>
+						<v-expansion-panels inset v-model="panels">
 							<v-expansion-panel>
 								<v-expansion-panel-header>ParticipationConstraint (HARD)</v-expansion-panel-header>
 								<v-expansion-panel-content>
@@ -167,7 +167,7 @@
 						<v-col class="text-right">
 							<v-btn
 								:loading="loading"
-								:disabled="loading"
+								:disabled="!constraintsValid()"
 								color="secondary"
 								class="ma-2 white--text"
 								@click="generateSchedule()"
@@ -175,11 +175,18 @@
 								Generate Schedule
 								<v-icon right dark> mdi-magic-staff </v-icon>
 							</v-btn>
+							<br />
+							<i v-if="!constraintsValid()" class="text-subtitle-2" style="color: gray; font-weight: 400">
+								Make sure to successfully fill all constraint panels and close them&nbsp;&nbsp;
+							</i>
 						</v-col>
 					</v-row>
 				</v-stepper-content>
 			</v-stepper-items>
 		</v-stepper>
+		<v-overlay :value="false">
+			<v-progress-circular indeterminate size="64"></v-progress-circular>
+		</v-overlay>
 	</v-container>
 </template>
 
@@ -212,17 +219,79 @@ import { CompleteCycleConstraint } from "@/models/CompleteCycleConstraint";
 export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 	private teams: Team[] = [];
 	private numberOfTeams: number | null = null;
-	private e1 = 1;
+	private step = 1;
 	private firstStepValid = true;
 	private secondStepValid = true;
+	private generatorFormValid = false;
 	private constraints: Array<Object> = [];
-	private isOkay = false;
 	private loading = false;
 	private scheduleGenerated: boolean = false;
 	private fixtureList: Object | null = null;
+	private panels = null;
+	private overlay: boolean = false;
+
+	get matchweeks() {
+		let matchweeks: Array<number> = [];
+		if (this.numberOfTeams !== null) {
+			for (let index = 1; index <= (this.numberOfTeams - 1) * 2; index++) {
+				matchweeks.push(index);
+			}
+		}
+		return matchweeks;
+	}
+
+	get numberOfMatchweeks() {
+		return this.matchweeks.length;
+	}
+
+	private constraintsValid() {
+		// If Static Venue Constraint is given
+		console.log(this.panels);
+		if (this.$refs.staticVenueConstraintPanel !== undefined) {
+			if ((<StaticVenueConstraintPanel>this.$refs.staticVenueConstraintPanel).staticVenueConstraintFormValid == false) {
+				return false;
+			}
+		}
+
+		// If shared Venue Constraint is given
+		if (this.$refs.sharedVenueConstraintPanel !== undefined) {
+			if ((<SharedVenueConstraintPanel>this.$refs.sharedVenueConstraintPanel).sharedVenueConstraintFormValid === false) {
+				return false;
+			}
+		}
+
+		// If Opponent Constraint is given
+		if (this.$refs.opponentConstraintPanel !== undefined) {
+			if ((<OpponentConstraintPanel>this.$refs.opponentConstraintPanel).opponentConstraintFormValid === false) {
+				return false;
+			}
+		}
+
+		// If Venue Constraint is given
+		if (this.$refs.venueConstraintPanel !== undefined) {
+			if ((<VenueConstraintPanel>this.$refs.venueConstraintPanel).venueConstraintFormValid === false) {
+				return false;
+			}
+		}
+
+		// If Repeater Gap Constraint is given
+		if (this.$refs.repeaterGapConstraintPanel !== undefined) {
+			if ((<RepeaterGapConstraintPanel>this.$refs.repeaterGapConstraintPanel).repeaterGapConstraintFormValid === false) {
+				return false;
+			}
+		}
+
+		if (this.$refs.fairnessConstraintPanel !== undefined) {
+			if ((<FairnessConstraintPanel>this.$refs.fairnessConstraintPanel).fairnessConstraintFormValid == false) {
+				return false;
+			}
+		}
+		// If none of the forms is invalid return true
+		return true;
+	}
 
 	private finishFirstStep() {
-		this.e1 = 2;
+		this.step = 2;
 		if (this.numberOfTeams !== null) {
 			for (let index = 0; index < this.numberOfTeams; index++) {
 				this.teams.push(new Team(index + 1));
@@ -230,6 +299,11 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 		} else {
 			console.error("numberOfTeams is null before stepping to step 2");
 		}
+	}
+
+	private goToFirstStep() {
+		this.step = 1;
+		this.teams = [];
 	}
 
 	private generateSchedule() {
@@ -271,7 +345,7 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 		if (this.$refs.fairnessConstraintPanel !== undefined) {
 			this.constraints?.push((<FairnessConstraintPanel>this.$refs.fairnessConstraintPanel).fairnessConstraint);
 		}
-
+		this.overlay = true;
 		this.axios
 			.post("http://127.0.0.1:9090/schedule", {
 				teams: this.teams,
@@ -280,24 +354,12 @@ export default class ScheduleGenerator extends Mixins(Vue, RulesMixin) {
 			.then((response) => {
 				this.fixtureList = response.data.matchweeks;
 				this.scheduleGenerated = true;
+				this.overlay = false;
 			})
-			.catch(function (error) {
+			.catch((error) => {
 				console.log(error);
+				this.overlay = false;
 			});
-	}
-
-	get matchweeks() {
-		let matchweeks: Array<number> = [];
-		if (this.numberOfTeams !== null) {
-			for (let index = 1; index <= (this.numberOfTeams - 1) * 2; index++) {
-				matchweeks.push(index);
-			}
-		}
-		return matchweeks;
-	}
-
-	get numberOfMatchweeks() {
-		return this.matchweeks.length;
 	}
 }
 </script>

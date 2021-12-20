@@ -5,7 +5,7 @@
 		<v-form ref="fairnessConstraintForm" v-model="fairnessConstraintFormValid">
 			<v-row>
 				<v-col cols="10" sm="7">
-					<v-text-field
+					<v-text-field class="mt-8"
 						v-model.number="fairnessConstraint.consecutiveHardMatches"
 						color="secondary"
 						label="Maximum number of consecutive matches against A-classed teams"
@@ -13,6 +13,10 @@
 						:rules="[rules.required, fairnessRules.maxHardMatches]"
 					>
 					</v-text-field>
+				</v-col>
+				<!-- <v-col sm="3"></v-col> -->
+				<v-col cols="10" sm="2">
+					<penalty-slider @update-penalty="updatePenalty($event, fairnessConstraint)" />
 				</v-col>
 			</v-row>
 		</v-form>
@@ -25,16 +29,20 @@ import RulesMixin from "@/mixins/RulesMixin";
 import { FairnessConstraint } from "@/models/FairnessConstraint";
 import { PropType } from "vue";
 import { Team } from "@/models/Team";
+import PenaltySlider from "@/components/shared/PenaltySlider.vue";
 
 @Component({
 	name: "FairnessConstraintPanel",
+	components: {
+		PenaltySlider,
+	},
 })
 export default class FairnessConstraintPanel extends Mixins(Vue, RulesMixin) {
 	@Prop({ type: Array as PropType<Team[]>, required: true })
 	private teams: Array<Team> | undefined;
 
 	public fairnessConstraint = new FairnessConstraint();
-	private fairnessConstraintFormValid: boolean = false;
+	public fairnessConstraintFormValid: boolean = false;
 
 	get numberOfFirstClassTeams() {
 		let numberOfFirstClassTeams: number = 0;
@@ -61,6 +69,10 @@ export default class FairnessConstraintPanel extends Mixins(Vue, RulesMixin) {
 			}
 		},
 	};
+
+	private updatePenalty(penalty: number, constraint: FairnessConstraint) {
+		constraint.penalty = penalty;
+	}
 }
 </script>
 
