@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-main>
-      <schedule-generator/>
+    <router-view></router-view>
+    <v-main class="body">
     </v-main>
   </v-app>
 </template>
@@ -18,3 +18,13 @@ import ScheduleGenerator from './components/ScheduleGenerator.vue';
 })
 export default class App extends Vue {}
 </script>
+
+<style>
+#app {
+	background-image: url(./assets/background-9.png);
+	/* background-color: #cccccc; */
+  /* background-size: cover; */
+  background-position: bottom;
+  background-repeat: no-repeat;
+}
+</style>

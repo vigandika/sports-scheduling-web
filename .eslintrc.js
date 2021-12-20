@@ -12,6 +12,7 @@ module.exports = {
         ecmaVersion: 2020
     },
     rules: {
+        "max-len": [2, 80, 4, { "ignoreUrls": true }],
         'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
     }
