@@ -1,14 +1,15 @@
 export class FairnessConstraint {
     type: string;
     level: string;
-    consecutiveHardMatches?: number;
     penalty?: number;
+    consecutiveHardMatches?: number;
     
     constructor();
-    constructor(consecutiveHardMatches?: number) {
+    constructor(penalty: number);
+    constructor(penalty?: number, consecutiveHardMatches?: number) {
         this.type = "fairnessConstraint";
         this.level = "SOFT";
+        this.penalty = penalty;
         this.consecutiveHardMatches = consecutiveHardMatches;
-        this.penalty = this.penalty;
     }
 }

@@ -40,8 +40,9 @@ import PenaltySlider from "@/components/shared/PenaltySlider.vue";
 export default class FairnessConstraintPanel extends Mixins(Vue, RulesMixin) {
 	@Prop({ type: Array as PropType<Team[]>, required: true })
 	private teams: Array<Team> | undefined;
-
-	public fairnessConstraint = new FairnessConstraint();
+	
+	// Add an initial penalty of
+	public fairnessConstraint = new FairnessConstraint(1);
 	public fairnessConstraintFormValid: boolean = false;
 
 	get numberOfFirstClassTeams() {

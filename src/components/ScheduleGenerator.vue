@@ -184,7 +184,7 @@
 				</v-stepper-content>
 			</v-stepper-items>
 		</v-stepper>
-		<v-overlay :value="false">
+		<v-overlay :value="overlay">
 			<v-progress-circular indeterminate size="64"></v-progress-circular>
 		</v-overlay>
 	</v-container>
